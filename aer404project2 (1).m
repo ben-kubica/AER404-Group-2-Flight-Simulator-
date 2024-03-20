@@ -1,6 +1,6 @@
 %commanded from joystick
 deltaT1 = 
-deltaT2 = 
+deltaT2 = hi
 deltaA = 
 deltaE = 
 deltaR = 
