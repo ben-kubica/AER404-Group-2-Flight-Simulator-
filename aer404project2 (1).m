@@ -197,10 +197,6 @@ CapGam = Jx*Jz-(Jxz)^2;
 CapGam_Pdot = Jxz*(Jx-Jy+Jz)*(P*Q)-(Jz*(Jz-Jy)+(Jxz)^2)*(Q*R)+Jz(l_a+l_t)+Jxz*(n_a+n_t);
 Jy_Qdot = (Jz-Jx)*(P*R)-Jxz*(P^2-R^2)+m_a+m_t;
 CapGam_Rdot = ((Jx-Jy)*Jx+(Jxz)^2)*(P*Q)-Jxz*(Jx-Jy+Jz)*(Q*R)+Jxz*(l_a+l_t)+Jx*(n_a+n_t);
-            %fixxxx
-Cap_Gam*Pdot = J(1,3)*(J(1,1) - J(2,2) + J(3,3))*(P*Q) - (J(3,3)*(J(3,3)-J(2,2)) + (J(1,3))^2)*(Q*R)+J(3,3)*(l_a + l_t) + J(1,3)*(n_a + n_t);
-J(2,2)*Qdot = (J(3,3) - J(1,1))*(P*R) - J(1,3)*((P^2) - (R^2)) + m_a + m_t;
-Cap_Gam*Rdot = ((J(1,1) - J(2,2))*J(1,1) + (J(1,3)^2)*(P*Q) - J(1,3)*(J(1,1) - J(2,2) + J(3,3)))*(Q*R) + J(1,3)*(l_a + l_t) + J(1,1)*(n_a + n_t);
 
 %Kinematic Equations
 
