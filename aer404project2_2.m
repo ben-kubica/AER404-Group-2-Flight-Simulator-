@@ -140,7 +140,7 @@ Za = -D*sin(alpha)*cos(beta) + C*sin(alpha)*sin(beta) - L*cos(alpha);
 %rolling, pitching, yawning denoted as l, m, n
 
 %rolling moment
-l_a = q*c*S*Cl;
+l_a = q*C*S*Cl;
 
 %pitching moment
 m_a = q*C*S*Cm;
@@ -158,9 +158,9 @@ constant_matrix = [(0.11*chord); 0; (0.1*chord)];
 %unsure how to write this expression
 %top of page 5 in supplementary
 %gives [la; ma; na]
-l_a_prime=q*c*SCl;
-m_a_prime=q*c*SCm;
-n_a_prime=q*c*SCn;
+l_a_prime=q*C*S*Cl;
+m_a_prime=q*C*S*Cm;
+n_a_prime=q*C*S*Cn;
 
 aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*c 0 0.1*c]);
 
