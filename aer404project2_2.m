@@ -1,3 +1,6 @@
+clear all;
+clc;
+
 %commanded from joystick
 deltaT1 = 0.0821;
 deltaT2 = 0.0821;
@@ -158,11 +161,13 @@ constant_matrix = [(0.11*chord); 0; (0.1*chord)];
 %unsure how to write this expression
 %top of page 5 in supplementary
 %gives [la; ma; na]
-l_a_prime=q*C*S*Cl;
-m_a_prime=q*C*S*Cm;
-n_a_prime=q*C*S*Cn;
 
-aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*C 0 0.1*C]);
+%double code
+% l_a_prime=q*C*S*Cl;
+% m_a_prime=q*C*S*Cm;
+% n_a_prime=q*C*S*Cn;
+% 
+% aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*C 0 0.1*C]);
 
 Actual_moments = moment_matrix + (cross(forces_matrix,constant_matrix));
 
@@ -178,8 +183,8 @@ XT = XT1 + XT2;
 engine_moment_matrix_1 = [XT1; 0; 0];
 engine_moment_matrix_2 = [XT2; 0; 0];
 
-engine_moment_1 =cross(engine_moment_matrix_1, (cmass - apt1));
-engine_moment_2= cross(engine_moment_matrix_2, (cmass - apt2));
+engine_moment_1 = cross(engine_moment_matrix_1, (cmass - apt1));
+engine_moment_2 = cross(engine_moment_matrix_2, (cmass - apt2));
 
 %Force Equation
 Udot = R*V - Q*W - g*sin(theta) + ((XT + Xa/mass));
@@ -198,9 +203,12 @@ Jz=J(3,3);
 %Moment Equations
 CapGam = Jx*Jz-(Jxz)^2;
 
-CapGam_Pdot = Jxz*(Jx-Jy+Jz)*(P*Q)-(Jz*(Jz-Jy)+(Jxz)^2)*(Q*R)+Jz(l_a+l_t)+Jxz*(n_a+n_t);
-Jy_Qdot = (Jz-Jx)*(P*R)-Jxz*(P^2-R^2)+m_a+m_t;
-CapGam_Rdot = ((Jx-Jy)*Jx+(Jxz)^2)*(P*Q)-Jxz*(Jx-Jy+Jz)*(Q*R)+Jxz*(l_a+l_t)+Jx*(n_a+n_t);
+n_t = engine_moment_matrix_1(3, 1) + engine_moment_matrix_2(3, 1);
+m_t = engine_moment_matrix_1(2, 1) + engine_moment_matrix_2(2, 1);
+
+CapGam_Pdot = Jxz*(Jx-Jy+Jz)*(P*Q)-(Jz*(Jz-Jy)+(Jxz)^2)*(Q*R)+Jz*(l_a+lt)+Jxz*(n_a+n_t);
+Jy_Qdot = (Jz-Jx)*(P*R)-Jxz*(P^2-R^2) + m_a + m_t;
+CapGam_Rdot = ((Jx-Jy)*Jx+(Jxz)^2)*(P*Q)-Jxz*(Jx-Jy+Jz)*(Q*R)+Jxz*(l_a+lt)+Jx*(n_a+n_t);
 
 %Kinematic Equations
 
@@ -232,10 +240,14 @@ M = (a*(1-e^2))/(sqrt((1-e^2*(sin(phi)^2)))^3);
 %prime vertical radius 
 N = a/(sqrt(1-e^2*(sin(phi))^2));
 
+% integrate latdot to input into lat using SIMULINK
+
+
 %latitude
 latdot = PNdot/(M + h);
 
 %longitude
+
 longdot = PEdot/((N + h)*cos(lat));
 
 
