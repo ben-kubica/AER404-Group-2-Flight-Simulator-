@@ -34,7 +34,7 @@ chord = 6.6;
 
 %aircraft center of mass
 cmass_og = [(0.23*chord) 0 (0.1*chord)];
-cmass = cmass_org.';
+cmass = cmass_og.';
 
 %aircraft aerodynamic center
 acenter_og = [(0.12*chord) 0 0];
@@ -61,7 +61,7 @@ l = 6.6;
 lt = 24.8;
 
 %angle of attack when lift is 0 (degrees)
-alhpa0 = deg2rad(-11.5);
+alpha0 = deg2rad(-11.5);
 
 %air density
 p = 1.225;
@@ -116,7 +116,7 @@ Cn = (1 - 3.8179*alpha)*beta + 1.7*(l/Vt)*P - 11.5*(l/Vt)*R - 0.63*deltaR;
 %subscript 't' indicates engine thrust source
 
 %drag
-D = q*S*C;
+D = q*S*CD;
 
 %crosswind
 C = q*S*Cc;
