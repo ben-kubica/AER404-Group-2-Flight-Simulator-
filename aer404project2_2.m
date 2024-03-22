@@ -178,11 +178,13 @@ XT = XT1 + XT2;
 engine_moment_matrix_1 = [XT1; 0; 0];
 engine_moment_matrix_2 = [XT2; 0; 0];
 
-engine_moment_1 =(cmass - apt1)*engine_moment_matrix_1;
-engine_moment_2= (cmass - apt2)*engine_moment_matrix_2;
+engine_moment_1 =cross(engine_moment_matrix_1, (cmass - apt1));
+engine_moment_2= cross(engine_moment_matrix_2, (cmass - apt2));
 
 %Force Equation
-Udot = R*V - Q*W - g*sin(theta) + ((XT + X/massa));
+Udot = R*V - Q*W - g*sin(theta) + ((XT + Xa/mass));
+Yt=0;
+Zt=0;
 Vdot = - R*U + P*W + g*sin(phi)*cos(theta) + ((Yt + Ya)/mass);
 Wdot = Q*U - P*V + g*cos(phi)*cos(theta) + ((Zt + Za)/mass);
 
