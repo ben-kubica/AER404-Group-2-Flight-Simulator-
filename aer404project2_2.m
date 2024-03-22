@@ -162,7 +162,7 @@ l_a_prime=q*C*S*Cl;
 m_a_prime=q*C*S*Cm;
 n_a_prime=q*C*S*Cn;
 
-aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*c 0 0.1*c]);
+aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*C 0 0.1*C]);
 
 Actual_moments = moment_matrix + (cross(forces_matrix,constant_matrix));
 
@@ -175,8 +175,11 @@ XT = XT1 + XT2;
 
 %Engine Moments
 %for each engine, moment is generated
-engine_moment = cross([XT1; 0; 0], (cmass - apti));
+engine_moment_matrix_1 = [XT1; 0; 0];
+engine_moment_matrix_2 = [XT2; 0; 0];
 
+engine_moment_1 =(cmass - apt1)*engine_moment_matrix_1;
+engine_moment_2= (cmass - apt2)*engine_moment_matrix_2;
 
 %Force Equation
 Udot = R*V - Q*W - g*sin(theta) + ((XT + X/massa));
