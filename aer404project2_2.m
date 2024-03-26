@@ -180,13 +180,8 @@ XT = XT1 + XT2;
 
 %Engine Moments
 %for each engine, moment is generated
-engine_moment_matrix_1 = [l_t1; m_t1; n_t1];
-engine_moment_matrix_2 = [l_t2; m_t2; n_t2];
 engine_moment_matrix_1 = [XT1; 0; 0];
 engine_moment_matrix_2 = [XT2; 0; 0];
-l_t=l_t1+l_t2;
-m_t=m_t1+m_t2;
-n_t1=n_t1+n_t2;
 
 engine_moment_1 = cross(engine_moment_matrix_1, (cmass - apt1));
 engine_moment_2 = cross(engine_moment_matrix_2, (cmass - apt2));
