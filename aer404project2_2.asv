@@ -1,4 +1,7 @@
-function xdot = aer404project2_2(x, u)
+clear all;
+clc;
+
+function xdot = (x, u = joystick inputs)
 
 %commanded from joystick
 deltaT1 = 0.0821;
@@ -247,9 +250,8 @@ latdot = PNdot/(M + h);
 
 %longitude
 
-longdot = PEdot/((N + h)*cos(PN));
+longdot = PEdot/((N + h)*cos(PE));
 
 
-xdot = [Udot; Vdot; Wdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
+xdot = []
 
-end
