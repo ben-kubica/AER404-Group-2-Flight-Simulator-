@@ -1,25 +1,27 @@
+
+function xdot = aer404project2_2(X, U)
+
 %commanded from joystick
-deltaT1 = 0.0821;
-deltaT2 = 0.0821;
-deltaA = 0;
-deltaE = 0.1780;
-deltaR = 0;
+deltaT1 =U(1)
+deltaT2 =U(2)
+deltaA = U(3)
+deltaE = U(4)
+deltaR = U(5)
 
-U = 84.9905;
-V = 0;
-W = 1.2713;
+U=X(7)
+V = X(8)
+W = X(9)
 
-P = 0;
-Q = 0.0149;
-R = 0;
-phi = 0;
-theta = 0.1;
-psi = 0;
+P = X(10)
+Q = X(11)
+R = X(12)
+phi = X(4)
+theta = X(5)
+psi = X(6)
 
-PN = deg2rad(43.676856);
-PE = deg2rad(-79.625335);
-h = 7224;
-
+PN =X(3)
+PE = X(2)
+h =X(1)
 
 %mass
 mass = 120000; 
@@ -34,7 +36,7 @@ chord = 6.6;
 
 %aircraft center of mass
 cmass_og = [(0.23*chord) 0 (0.1*chord)];
-cmass = cmass_org.';
+cmass = cmass_og.';
 
 %aircraft aerodynamic center
 acenter_og = [(0.12*chord) 0 0];
@@ -61,7 +63,7 @@ l = 6.6;
 lt = 24.8;
 
 %angle of attack when lift is 0 (degrees)
-alhpa0 = deg2rad(-11.5);
+alpha0 = deg2rad(-11.5);
 
 %air density
 p = 1.225;
@@ -76,7 +78,7 @@ Vt = sqrt(U^2 + V^2 + W^2);
 q = 0.5*p*Vt^2;
 
 %angle of attack
-alpha = atand(W/U);
+alpha = atan(W/U);
 
 %sideslipp angle
 beta = asin(V/Vt);
@@ -116,7 +118,7 @@ Cn = (1 - 3.8179*alpha)*beta + 1.7*(l/Vt)*P - 11.5*(l/Vt)*R - 0.63*deltaR;
 %subscript 't' indicates engine thrust source
 
 %drag
-D = q*S*C;
+D = q*S*CD;
 
 %crosswind
 C = q*S*Cc;
@@ -140,7 +142,7 @@ Za = -D*sin(alpha)*cos(beta) + C*sin(alpha)*sin(beta) - L*cos(alpha);
 %rolling, pitching, yawning denoted as l, m, n
 
 %rolling moment
-l_a = q*c*S*Cl;
+l_a = q*C*S*Cl;
 
 %pitching moment
 m_a = q*C*S*Cm;
@@ -158,11 +160,13 @@ constant_matrix = [(0.11*chord); 0; (0.1*chord)];
 %unsure how to write this expression
 %top of page 5 in supplementary
 %gives [la; ma; na]
-l_a_prime=q*c*SCl;
-m_a_prime=q*c*SCm;
-n_a_prime=q*c*SCn;
 
-aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*c 0 0.1*c]);
+%double code
+% l_a_prime=q*C*S*Cl;
+% m_a_prime=q*C*S*Cm;
+% n_a_prime=q*C*S*Cn;
+% 
+% aero_moments = [l_a_prime m_a_prime n_a_prime] + cross([Xa Ya Za], [0.11*C 0 0.1*C]);
 
 Actual_moments = moment_matrix + (cross(forces_matrix,constant_matrix));
 
@@ -175,11 +179,16 @@ XT = XT1 + XT2;
 
 %Engine Moments
 %for each engine, moment is generated
-engine_moment = cross([XT1; 0; 0], (cmass - apti));
+engine_moment_matrix_1 = [XT1; 0; 0];
+engine_moment_matrix_2 = [XT2; 0; 0];
 
+engine_moment_1 = cross(engine_moment_matrix_1, (cmass - apt1));
+engine_moment_2 = cross(engine_moment_matrix_2, (cmass - apt2));
 
 %Force Equation
-Udot = R*V - Q*W - g*sin(theta) + ((XT + X/massa));
+Udot = R*V - Q*W - g*sin(theta) + ((XT + Xa/mass));
+Yt=0;
+Zt=0;
 Vdot = - R*U + P*W + g*sin(phi)*cos(theta) + ((Yt + Ya)/mass);
 Wdot = Q*U - P*V + g*cos(phi)*cos(theta) + ((Zt + Za)/mass);
 
@@ -193,9 +202,12 @@ Jz=J(3,3);
 %Moment Equations
 CapGam = Jx*Jz-(Jxz)^2;
 
-CapGam_Pdot = Jxz*(Jx-Jy+Jz)*(P*Q)-(Jz*(Jz-Jy)+(Jxz)^2)*(Q*R)+Jz(l_a+l_t)+Jxz*(n_a+n_t);
-Jy_Qdot = (Jz-Jx)*(P*R)-Jxz*(P^2-R^2)+m_a+m_t;
-CapGam_Rdot = ((Jx-Jy)*Jx+(Jxz)^2)*(P*Q)-Jxz*(Jx-Jy+Jz)*(Q*R)+Jxz*(l_a+l_t)+Jx*(n_a+n_t);
+n_t = engine_moment_matrix_1(3, 1) + engine_moment_matrix_2(3, 1);
+m_t = engine_moment_matrix_1(2, 1) + engine_moment_matrix_2(2, 1);
+
+CapGam_Pdot = Jxz*(Jx-Jy+Jz)*(P*Q)-(Jz*(Jz-Jy)+(Jxz)^2)*(Q*R)+Jz*(l_a+lt)+Jxz*(n_a+n_t);
+Jy_Qdot = (Jz-Jx)*(P*R)-Jxz*(P^2-R^2) + m_a + m_t;
+CapGam_Rdot = ((Jx-Jy)*Jx+(Jxz)^2)*(P*Q)-Jxz*(Jx-Jy+Jz)*(Q*R)+Jxz*(l_a+lt)+Jx*(n_a+n_t);
 
 %Kinematic Equations
 
@@ -227,27 +239,18 @@ M = (a*(1-e^2))/(sqrt((1-e^2*(sin(phi)^2)))^3);
 %prime vertical radius 
 N = a/(sqrt(1-e^2*(sin(phi))^2));
 
+% integrate latdot to input into lat using SIMULINK
+
+
 %latitude
 latdot = PNdot/(M + h);
 
 %longitude
-longdot = PEdot/((N + h)*cos(lat));
 
+longdot = PEdot/((N + h)*cos(PN));
 
+%xdot = [Udot; Vdot; Wdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+xdot = [1; 1; Wdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
+%longdot = PEdot/((N + h)*cos(lat));
+end
