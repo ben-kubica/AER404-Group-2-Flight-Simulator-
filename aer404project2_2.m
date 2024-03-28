@@ -23,6 +23,7 @@ PN =X(3)
 PE = X(2)
 h =X(1)
 
+%{ 
 %mass
 mass = 120000; 
 
@@ -251,6 +252,8 @@ longdot = PEdot/((N + h)*cos(PN));
 
 %xdot = [Udot; Vdot; Wdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
 
-xdot = [1; 1; 1; 1; 1; 1; 1; 1; 1];
+%}
+
+xdot = [1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1];
 %longdot = PEdot/((N + h)*cos(lat));
 end
