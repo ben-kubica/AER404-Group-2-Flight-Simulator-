@@ -1,14 +1,13 @@
-
 function xdot = aer404project2_2(X, U)
 
 %commanded from joystick
-deltaT1 =U(1)
-deltaT2 =U(2)
-deltaA = U(3)
-deltaE = U(4)
-deltaR = U(5)
+deltaT1 = U(1);
+deltaT2 = U(2);
+deltaA = U(3);
+deltaE = U(4);
+deltaR = U(5);
 
-U=X(7)
+U = X(7)
 V = X(8)
 W = X(9)
 
@@ -23,7 +22,6 @@ PN =X(3)
 PE = X(2)
 h =X(1)
 
-%{ 
 %mass
 mass = 120000; 
 
@@ -250,10 +248,9 @@ latdot = PNdot/(M + h);
 
 longdot = PEdot/((N + h)*cos(PN));
 
-%xdot = [Udot; Vdot; Wdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
+%xdot = [Udot; Vdot; Wdot; CapGam_Pdot; Jy_Qdot; CapGam_Rdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
+%X0 = [longitude0; latitude0; altitude0; phi0; theta0; psi0; U0; V0; W0; P0; Q0; R0];
 
-%}
-
-xdot = [1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1];
+xdot = [PEdot; PNdot; hdot; phidot; thetadot; psidot; Udot; Vdot; Wdot; CapGam_Pdot; Jy_Qdot; CapGam_Rdot];
 %longdot = PEdot/((N + h)*cos(lat));
 end
