@@ -1,13 +1,13 @@
 function xdot = aer404project2_2(X, U)
 
 %commanded from joystick
-deltaT1 = U(1);
-deltaT2 = U(2);
-deltaA = U(3);
-deltaE = U(4);
-deltaR = U(5);
+deltaT1 = U(1)
+deltaT2 = U(2)
+deltaA = U(3)
+deltaE = U(4)
+deltaR = U(5)
 
-U = X(7)
+u = X(7)
 V = X(8)
 W = X(9)
 
@@ -71,13 +71,13 @@ p = 1.225;
 g = 9.81;
 
 %airspeed
-Vt = sqrt(U^2 + V^2 + W^2);
+Vt = sqrt(u^2 + V^2 + W^2);
 
 %dynamic pressure
 q = 0.5*p*Vt^2;
 
 %angle of attack
-alpha = atan(W/U);
+alpha = atan(W/u);
 
 %sideslipp angle
 beta = asin(V/Vt);
@@ -185,11 +185,11 @@ engine_moment_1 = cross(engine_moment_matrix_1, (cmass - apt1));
 engine_moment_2 = cross(engine_moment_matrix_2, (cmass - apt2));
 
 %Force Equation
-Udot = R*V - Q*W - g*sin(theta) + ((XT + Xa/mass));
+udot = R*V - Q*W - g*sin(theta) + ((XT + Xa/mass));
 Yt=0;
 Zt=0;
-Vdot = - R*U + P*W + g*sin(phi)*cos(theta) + ((Yt + Ya)/mass);
-Wdot = Q*U - P*V + g*cos(phi)*cos(theta) + ((Zt + Za)/mass);
+Vdot = - R*u + P*W + g*sin(phi)*cos(theta) + ((Yt + Ya)/mass);
+Wdot = Q*u - P*V + g*cos(phi)*cos(theta) + ((Zt + Za)/mass);
 
 %initializing matrix elements
 Jx=J(1,1);
@@ -218,13 +218,13 @@ psidot = (Q*sin(phi) + R*cos(phi))/(cos(theta));
 
 
 %Navigation Equations
-PNdot = U*cos(theta)*cos(psi) + V*(-cos(phi)*sin(psi) + sin(phi)*sin(theta)*cos(psi)) + W*(sin(phi)*sin(psi) + cos(phi)*sin(theta)*cos(psi));
+PNdot = u*cos(theta)*cos(psi) + V*(-cos(phi)*sin(psi) + sin(phi)*sin(theta)*cos(psi)) + W*(sin(phi)*sin(psi) + cos(phi)*sin(theta)*cos(psi));
 
-PEdot = U*cos(theta)*sin(psi) + V*(cos(phi)*cos(psi) + sin(phi)*sin(theta)*sin(psi)) + W*(-sin(phi)*cos(psi) + cos(phi)*sin(theta)*sin(psi));
+PEdot = u*cos(theta)*sin(psi) + V*(cos(phi)*cos(psi) + sin(phi)*sin(theta)*sin(psi)) + W*(-sin(phi)*cos(psi) + cos(phi)*sin(theta)*sin(psi));
 
-hdot = U*sin(theta) - V*sin(phi)*cos(theta) - W*cos(phi)*cos(theta);
+hdot = u*sin(theta) - V*sin(phi)*cos(theta) - W*cos(phi)*cos(theta);
 
-%% GEODETIC COORDINATES EQUATIONS %%
+%% GEODETIC COORDINATES EQuATIONS %%
 
 %earth's equitorial radius a
 a = 6378137;
@@ -238,7 +238,7 @@ M = (a*(1-e^2))/(sqrt((1-e^2*(sin(phi)^2)))^3);
 %prime vertical radius 
 N = a/(sqrt(1-e^2*(sin(phi))^2));
 
-% integrate latdot to input into lat using SIMULINK
+% integrate latdot to input into lat using SIMuLINK
 
 
 %latitude
@@ -248,9 +248,9 @@ latdot = PNdot/(M + h);
 
 longdot = PEdot/((N + h)*cos(PN));
 
-%xdot = [Udot; Vdot; Wdot; CapGam_Pdot; Jy_Qdot; CapGam_Rdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
-%X0 = [longitude0; latitude0; altitude0; phi0; theta0; psi0; U0; V0; W0; P0; Q0; R0];
+%xdot = [udot; Vdot; Wdot; CapGam_Pdot; Jy_Qdot; CapGam_Rdot; phidot; thetadot; psidot; PNdot; PEdot; hdot];
+%X0 = [longitude0; latitude0; altitude0; phi0; theta0; psi0; u0; V0; W0; P0; Q0; R0];
 
-xdot = [PEdot; PNdot; hdot; phidot; thetadot; psidot; Udot; Vdot; Wdot; CapGam_Pdot; Jy_Qdot; CapGam_Rdot];
+xdot = [PEdot; PNdot; hdot; phidot; thetadot; psidot; udot; Vdot; Wdot; CapGam_Pdot; Jy_Qdot; CapGam_Rdot];
 %longdot = PEdot/((N + h)*cos(lat));
 end
